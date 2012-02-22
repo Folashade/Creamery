@@ -1,4 +1,6 @@
 Creamery::Application.routes.draw do
+  resources :assignments
+
   resources :employees
 
   # The priority is based upon order of creation:
