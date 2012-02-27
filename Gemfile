@@ -20,6 +20,23 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+# Gems used only in testing
+group :development do
+	gem 'hirb'
+	gem 'wirble'
+	gem 'faker'
+	gem 'populator3'
+end
+
+# Gems used only in testing
+group :test do
+	gem 'shoulda'
+	gem 'shoulda-matchers'
+	gem 'factory_girl_rails'
+	gem "mocha"
+	gem 'simplecov'
+end
+
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
