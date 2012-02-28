@@ -17,10 +17,17 @@ class Employee < ActiveRecord::Base
   scope :active, where('active = ?', true)
   # get all the employees who are inactive 
   scope :inactive, where('active = ?', false)
-  
+  # gets the regular employees
+  scope :regulars, where('role = ?', 'employee')
+  # gets the managers
+  scope :managers, where('role = ?', 'manager')
+  # gets the regular employees
+  scope :admins, where('role = ?', 'admin')
   
   # Validations
   # -----------------------------
   # make sure required fields are present
-   validates_presence_of :first_name, :last_name, :date_of_birth, :role, :ssn
+  validates_presence_of :first_name, :last_name, :date_of_birth, :role, :ssn
+  # Make sure your employee was not born in the future
+  validates_date :date_of_birth, :on_or_before => :today
 end
