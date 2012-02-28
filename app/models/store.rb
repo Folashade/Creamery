@@ -4,6 +4,15 @@ class Store < ActiveRecord::Base
   has_many :employees, :through => :assignments
   has_many :assignments 
   
+  # Scopes
+  # -----------------------------
+  # list stores in alphabetical order
+  scope :alphabetical, order('name')
+  #returns only active stores
+  scope :active, where('active = ?', true)
+  #returns only inactive stores
+  scope :inactive, where('active = ?', false)
+  
   
   # Validations
   # -----------------------------
@@ -15,7 +24,8 @@ class Store < ActiveRecord::Base
   validates_format_of :phone, :with => /^(\d{10}|\(?\d{3}\)?[-. ]\d{3}[-.]\d{4})$/, :message => "should be 10 digits (area code needed) and delimited with dashes only"
   # if state is given, must be one of the choices given (no hacking this field)
   validates_inclusion_of :state, :in => %w[PA OH WV], :message => "is not an option", :allow_nil => true, :allow_blank => true
-
+  # makes sure the stores names are unique within the system
+  validates_uniqueness_of :name
   
   
 end

@@ -12,6 +12,6 @@ class AssignmentTest < ActiveSupport::TestCase
   # Validations ...         #
   #should validate_presence_of(:store_id)
   #should validate_presence_of(:employee_id)
-  should validate_presence_of(:start_date)
+  #should validate_presence_of(:start_date)
   
 end
