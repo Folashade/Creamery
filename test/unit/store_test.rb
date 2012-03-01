@@ -42,5 +42,68 @@ class StoreTest < ActiveSupport::TestCase
   should_not allow_value("bad").for(:state)
   should_not allow_value(10).for(:state)
   should_not allow_value("CA").for(:state)
-  
-end
+ 
+
+  # -------------------------------------
+  # Testing other methods with a context
+  context "Creating three stores" do
+    setup do 
+      @pitt = Factory.create(:store, :name => "Pitt", :active => false)
+      @sqh = Factory.create(:store, :name => "Squirrel Hill", :phone => "4122688211")
+      @cmu = Factory.create(:store)
+    end
+    
+    # provide a teardown method as well
+          teardown do
+            @pitt.destroy
+            @sqh.destroy
+            @cmu.destroy
+          end
+        
+          # now run the tests:
+          # test one of each factory (not really required, but not a bad idea)
+          should "show that all factories are properly created" do
+            assert_equal "CMU", @cmu.name
+            assert_equal "Pitt", @pitt.name
+            assert_equal "Squirrel Hill", @sqh.name
+            assert @cmu.active
+            assert @sqh.active
+            deny @pitt.active
+          end
+          
+          
+    # test the scope 'alphabetical'
+    should "shows that there are three owners in in alphabetical order" do
+      assert_equal ["CMU", "Pitt", "Squirrel Hill"], Store.alphabetical.map{|s| s.name}
+    end
+    
+    # # test the scope 'active'
+    # should "shows that there are two active owners" do
+    #   assert_equal 2, Owner.active.size
+    #   assert_equal ["Alex", "Mark"], Owner.active.alphabetical. map{|o| o.first_name}
+    # end
+    # 
+    # # test the scope 'search'
+    # should "shows that search for owner by either (part of) last or first name works" do
+    #   assert_equal 3, Owner.search("Hei").size
+    #   assert_equal 1, Owner.search("Mark").size
+    # end
+    # 
+    # # test the method 'name' works
+    # should "shows that name method works" do
+    #   assert_equal "Heimann, Alex", @alex.name
+    # end
+    # 
+    # # test the method 'proper_name' works
+    # should "shows that proper_name method works" do
+    #   assert_equal "Alex Heimann", @alex.proper_name
+    # end
+    # 
+    # # test the callback is working 'reformat_phone'
+    # should "shows that Mark's phone is stripped of non-digits" do
+    #   assert_equal "4122688211", @mark.phone
+    # end
+    
+    
+  end #test begin   
+end #store test

@@ -26,7 +26,19 @@ class Store < ActiveRecord::Base
   validates_inclusion_of :state, :in => %w[PA OH WV], :message => "is not an option", :allow_nil => true, :allow_blank => true
   # makes sure the stores names are unique within the system
   validates_uniqueness_of :name
-  
-  
+  #/^[\w\d]+$/
+
+
+    # Callback code
+    # -----------------------------
+     private
+       # We need to strip non-digits before saving to db
+       def reformat_phone
+         phone = self.phone.to_s  # change to string in case input as all numbers 
+         phone.gsub!(/[^0-9]/,"") # strip all non-digits
+         self.phone = phone       # reset self.phone to new string
+       end
+       
+    
 end
 
