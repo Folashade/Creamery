@@ -395,9 +395,9 @@
         1,
         null,
         1,
-        15,
-        15,
-        15,
+        18,
+        18,
+        18,
         null,
         null,
         null,
@@ -405,7 +405,7 @@
         null
       ]
     },
-    "timestamp": 1330657928
+    "timestamp": 1330661463
   },
   "Unit Tests": {
     "coverage": {
@@ -764,6 +764,8 @@
       ],
       "/Users/FOkunubi/Documents/Spring '12 Classes/Application Design and Development/Projects/Phase2/Creamery/app/models/store.rb": [
         1,
+        1,
+        null,
         null,
         null,
         1,
@@ -796,12 +798,12 @@
         null,
         null,
         null,
+        1,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        1,
+        0,
+        0,
+        0,
         null,
         null,
         null,
@@ -809,6 +811,6 @@
         null
       ]
     },
-    "timestamp": 1330584641
+    "timestamp": 1330661317
   }
 }

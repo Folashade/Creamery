@@ -10,10 +10,10 @@ class Store < ActiveRecord::Base
   # -----------------------------
   # list stores in alphabetical order
   scope :alphabetical, order('name')
-  #returns only active stores
-  scope :active, where('active = ?', true)
   #returns only inactive stores
   scope :inactive, where('active = ?', false)
+  #returns only active stores
+  scope :active, where('active = ?', true)
   # searches for store by name
   scope :search, lambda { |store| where('name LIKE ?', "#{store}%") }
   

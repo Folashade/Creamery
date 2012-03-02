@@ -68,7 +68,6 @@ class StoreTest < ActiveSupport::TestCase
             assert_equal "Squirrel Hill", @sqh.name
             assert @cmu.active
             assert @sqh.active
-            assert @pitt.inactive
             deny @pitt.active ## deny is specified in test/test_helper.rb
           end
           
@@ -81,7 +80,13 @@ class StoreTest < ActiveSupport::TestCase
     # test the scope 'active'
     should "shows that there are two active Stores" do
       assert_equal 2, Store.active.size
-      assert_equal ["CMU", "Squirrel Hill"], Store.active.alphabetical. map{|s| s.name}
+      assert_equal ["CMU", "Squirrel Hill"], Store.active.alphabetical.map{|s| s.name}
+    end
+    
+    # test the scope 'inactive'
+    should "shows that there are one inactive Stores" do
+      assert_equal 1, Store.inactive.size
+      assert_equal ["Pitt"], Store.inactive.alphabetical.map{|s| s.name}
     end
     
     # test the scope 'search'
