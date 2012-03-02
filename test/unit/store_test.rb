@@ -68,6 +68,7 @@ class StoreTest < ActiveSupport::TestCase
             assert_equal "Squirrel Hill", @sqh.name
             assert @cmu.active
             assert @sqh.active
+            assert @pitt.inactive
             deny @pitt.active ## deny is specified in test/test_helper.rb
           end
           
