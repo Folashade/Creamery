@@ -1,7 +1,7 @@
 class Employee < ActiveRecord::Base
-  #Callbacks
-  #phone
-  #before_save :reformat_phone
+  # Callbacks
+  # -----------------------------
+  before_save :reformat_phone
   before_save :validate_active_input
   
   
@@ -38,6 +38,8 @@ class Employee < ActiveRecord::Base
   validates_date :date_of_birth, :on_or_before => :today        #- test -#
   # Make sure your employee is not more than 100 years old
   validates_date :date_of_birth, :after => 100.years.ago.to_date  #- test -#
+  # Make sure your employee is not younger than 14 years old
+  validates_date :date_of_birth, :on_or_before => 14.years.ago.to_date
   # Make sure ssn is valid   #- test -#
   validates_format_of :ssn, :with => /^\d{3}[- ]?\d{2}[- ]?\d{4}$/, :message => "should be nine digits long", :allow_blank => false
   # Makes sure names cannot have numbers    #- test -#
@@ -49,7 +51,8 @@ class Employee < ActiveRecord::Base
   validates_inclusion_of :role, :in => %w[manager admin employee], :message => "is not an option", :allow_nil => true, :allow_blank => false 
 
 
-  #------------MEHTIEhi
+  # Methods
+  # -----------------------------
   def validate_active_input
     if %w[t true 1].include?(self.active) == true
       self.active = 't'
@@ -57,6 +60,19 @@ class Employee < ActiveRecord::Base
     end
   end
   
+  def name
+    last_name + ", " + first_name
+  end
+
+  # Callback code
+  # -----------------------------
+   private
+     # We need to strip non-digits before saving to db
+     def reformat_phone
+       phone = self.phone.to_s  # change to string in case input as all numbers 
+       phone.gsub!(/[^0-9]/,"") # strip all non-digits
+       self.phone = phone       # reset self.phone to new string
+     end 
 
 
 end

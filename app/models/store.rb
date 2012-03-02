@@ -33,6 +33,10 @@ class Store < ActiveRecord::Base
   #/^[\w\d]+$/
 
 
+  # Methods
+  # -----------------------------
+
+
     # Callback code
     # -----------------------------
      private
