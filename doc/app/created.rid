@@ -1,0 +1,13 @@
+Thu, 01 Mar 2012 21:28:47 -0500
+doc/README_FOR_APP	Wed, 15 Feb 2012 15:30:48 -0500
+app/controllers/application_controller.rb	Wed, 15 Feb 2012 15:30:48 -0500
+app/controllers/assignments_controller.rb	Tue, 21 Feb 2012 19:19:32 -0500
+app/controllers/employees_controller.rb	Tue, 21 Feb 2012 19:04:53 -0500
+app/controllers/stores_controller.rb	Tue, 21 Feb 2012 19:40:45 -0500
+app/helpers/application_helper.rb	Wed, 15 Feb 2012 15:30:48 -0500
+app/helpers/assignments_helper.rb	Tue, 21 Feb 2012 19:19:33 -0500
+app/helpers/employees_helper.rb	Tue, 21 Feb 2012 19:04:53 -0500
+app/helpers/stores_helper.rb	Tue, 21 Feb 2012 19:40:45 -0500
+app/models/assignment.rb	Mon, 27 Feb 2012 18:47:55 -0500
+app/models/employee.rb	Thu, 01 Mar 2012 01:34:10 -0500
+app/models/store.rb	Thu, 01 Mar 2012 21:26:57 -0500

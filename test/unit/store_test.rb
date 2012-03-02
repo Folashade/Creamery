@@ -49,7 +49,7 @@ class StoreTest < ActiveSupport::TestCase
   context "Creating three stores" do
     setup do 
       @pitt = Factory.create(:store, :name => "Pitt", :active => false)
-      @sqh = Factory.create(:store, :name => "Squirrel Hill", :phone => "4122688211")
+      @sqh = Factory.create(:store, :name => "Squirrel Hill", :phone => "412-268-8211")
       @cmu = Factory.create(:store)
     end
     
@@ -68,41 +68,31 @@ class StoreTest < ActiveSupport::TestCase
             assert_equal "Squirrel Hill", @sqh.name
             assert @cmu.active
             assert @sqh.active
-            deny @pitt.active
+            deny @pitt.active ## deny is specified in test/test_helper.rb
           end
           
           
     # test the scope 'alphabetical'
-    should "shows that there are three owners in in alphabetical order" do
+    should "shows that there are three Stores in in alphabetical order" do
       assert_equal ["CMU", "Pitt", "Squirrel Hill"], Store.alphabetical.map{|s| s.name}
     end
     
-    # # test the scope 'active'
-    # should "shows that there are two active owners" do
-    #   assert_equal 2, Owner.active.size
-    #   assert_equal ["Alex", "Mark"], Owner.active.alphabetical. map{|o| o.first_name}
-    # end
-    # 
-    # # test the scope 'search'
-    # should "shows that search for owner by either (part of) last or first name works" do
-    #   assert_equal 3, Owner.search("Hei").size
-    #   assert_equal 1, Owner.search("Mark").size
-    # end
-    # 
-    # # test the method 'name' works
-    # should "shows that name method works" do
-    #   assert_equal "Heimann, Alex", @alex.name
-    # end
-    # 
-    # # test the method 'proper_name' works
-    # should "shows that proper_name method works" do
-    #   assert_equal "Alex Heimann", @alex.proper_name
-    # end
-    # 
-    # # test the callback is working 'reformat_phone'
-    # should "shows that Mark's phone is stripped of non-digits" do
-    #   assert_equal "4122688211", @mark.phone
-    # end
+    # test the scope 'active'
+    should "shows that there are two active Stores" do
+      assert_equal 2, Store.active.size
+      assert_equal ["CMU", "Squirrel Hill"], Store.active.alphabetical. map{|s| s.name}
+    end
+    
+    # test the scope 'search'
+    should "shows that search for Store by name" do
+      assert_equal 1, Store.search("Sq").size
+      assert_equal 1, Store.search("C").size
+    end
+    
+    # test the callback is working 'reformat_phone'
+    should "shows that the Squirrel Hill Store's phone is stripped of non-digits" do
+      assert_equal "4122688211", @sqh.phone
+    end
     
     
   end #test begin   

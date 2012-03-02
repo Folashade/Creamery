@@ -1,4 +1,6 @@
 class Store < ActiveRecord::Base
+   before_save :reformat_phone
+  
   # Relationships
   # -----------------------------
   has_many :employees, :through => :assignments
@@ -12,12 +14,14 @@ class Store < ActiveRecord::Base
   scope :active, where('active = ?', true)
   #returns only inactive stores
   scope :inactive, where('active = ?', false)
+  # searches for store by name
+  scope :search, lambda { |store| where('name LIKE ?', "#{store}%") }
   
   
   # Validations
   # -----------------------------
   # make sure required fields are present
-  validates_presence_of :name, :street, :city, :state, :zip, :phone, :created_at
+  validates_presence_of :name, :street, :city, :state, :zip, :phone
   # if zip included, it must be 5 digits only
   validates_format_of :zip, :with => /^\d{5}$/, :message => "should be five digits long", :allow_blank => true
   # phone can have dashes, spaces, dots and parens, but must be 10 digits
