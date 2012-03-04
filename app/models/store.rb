@@ -27,7 +27,7 @@ class Store < ActiveRecord::Base
   # phone can have dashes, spaces, dots and parens, but must be 10 digits
   validates_format_of :phone, :with => /^(\d{10}|\(?\d{3}\)?[-. ]\d{3}[-.]\d{4})$/, :message => "should be 10 digits (area code needed) and delimited with dashes only"
   # if state is given, must be one of the choices given (no hacking this field)
-  validates_inclusion_of :state, :in => %w[PA OH WV], :message => "is not an option", :allow_nil => true, :allow_blank => true
+  validates_inclusion_of :state, :in => %w[PA OH WV], :message => ": As of now our stores should only be in PA, OH, and WV.", :allow_nil => true, :allow_blank => true
   # makes sure the stores names are unique within the system
   validates_uniqueness_of :name
   #/^[\w\d]+$/
