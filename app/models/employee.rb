@@ -62,10 +62,6 @@ class Employee < ActiveRecord::Base
     last_name + ", " + first_name
   end
   
-  def current_assignment
-    #empid = self.id
-  end
-
   def age
     bday = self.date_of_birth
     currentYear = Time.now.year
@@ -86,10 +82,8 @@ class Employee < ActiveRecord::Base
     else
       return false 
     end    
-  end
-  
-
-  
+  end 
+ 
   def current_assignment
     return self.assignments.find_by_end_date(nil)
   end

@@ -5,7 +5,7 @@ class EmployeeTest < ActiveSupport::TestCase
   #   assert true
   # end
   
-  #Relationship macros...
+  # Relationship macros...
   should have_many(:assignments)
   should have_many(:stores).through(:assignments)
   
@@ -155,10 +155,17 @@ class EmployeeTest < ActiveSupport::TestCase
       @man = Factory.create(:employee, :first_name => "The", :last_name => "Man", :active => true)
       @main = Factory.create(:store, :name => "Main Street", :active => true)
       @assn_001 = Factory.create(:assignment, :store => @main, :employee => @man, :start_date => 6.months.ago.to_date, :end_date => 2.months.ago.to_date)
+      # The Man should have no current assignment
       assert_equal nil, @man.current_assignment
       @seq = Factory.create(:store, :name => "The Sequel")
       @assn_002 = Factory.create(:assignment, :store => @seq, :employee => @man, :start_date => 5.days.ago.to_date, :end_date => nil)
+      # ... until I give him one
       assert_equal @assn_002, @man.current_assignment
+      @man.destroy
+      @main.destroy
+      @seq.destroy
+      @assn_001.destroy
+      @assn_002.destroy
     end
        
   end #test begin
