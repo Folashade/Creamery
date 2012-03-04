@@ -48,9 +48,9 @@ class StoreTest < ActiveSupport::TestCase
   # Testing other methods with a context
   context "Creating three stores" do
     setup do 
-      @pitt = Factory.create(:store, :name => "Pitt", :active => false)
-      @sqh = Factory.create(:store, :name => "Squirrel Hill", :phone => "412-268-8211")
-      @cmu = Factory.create(:store)
+      @pitt = FactoryGirl.create(:store, :name => "Pitt", :active => false)
+      @sqh = FactoryGirl.create(:store, :name => "Squirrel Hill", :phone => "412-268-8211")
+      @cmu = FactoryGirl.create(:store)
     end
     
     # provide a teardown method as well

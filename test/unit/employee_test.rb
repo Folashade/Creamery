@@ -52,9 +52,9 @@ class EmployeeTest < ActiveSupport::TestCase
   # Testing other methods with a context
   context "Creating three employees" do
     setup do 
-      @john = Factory.create(:employee, :first_name => "John", :role => "employee", :active => false, :date_of_birth => Date.new(1994,02,14))
-      @aud = Factory.create(:employee, :first_name => "Audrey", :phone => "412-268-8211", :role => "admin")
-      @aus = Factory.create(:employee, :role => "manager", :date_of_birth => Date.new(1995,04,14))
+      @john = FactoryGirl.create(:employee, :first_name => "John", :role => "employee", :active => false, :date_of_birth => Date.new(1994,02,14))
+      @aud = FactoryGirl.create(:employee, :first_name => "Audrey", :phone => "412-268-8211", :role => "admin")
+      @aus = FactoryGirl.create(:employee, :role => "manager", :date_of_birth => Date.new(1995,04,14))
     end
     
     # provide a teardown method as well
@@ -152,13 +152,15 @@ class EmployeeTest < ActiveSupport::TestCase
     
     # test method: current assignment
     should "show if the 'current_assignment' method is working" do
-      @man = Factory.create(:employee, :first_name => "The", :last_name => "Man", :active => true)
-      @main = Factory.create(:store, :name => "Main Street", :active => true)
-      @assn_001 = Factory.create(:assignment, :store => @main, :employee => @man, :start_date => 6.months.ago.to_date, :end_date => 2.months.ago.to_date)
+      @man = FactoryGirl.create(:employee, :first_name => "The", :last_name => "Man", :active => true)
+      @main = FactoryGirl.create(:store, :name => "Main Street", :active => true)
+      @assn_001 = FactoryGirl.create(:assignment, :store => @main, :employee => @man, :start_date => 6.months.ago.to_date, :end_date => 2.months.ago.to_date)
+      
       # The Man should have no current assignment
       assert_equal nil, @man.current_assignment
-      @seq = Factory.create(:store, :name => "The Sequel")
-      @assn_002 = Factory.create(:assignment, :store => @seq, :employee => @man, :start_date => 5.days.ago.to_date, :end_date => nil)
+      @seq = FactoryGirl.create(:store, :name => "The Sequel")
+      @assn_002 = FactoryGirl.create(:assignment, :store => @seq, :employee => @man, :start_date => 5.days.ago.to_date, :end_date => nil)
+      
       # ... until I give him one
       assert_equal @assn_002, @man.current_assignment
       @man.destroy
