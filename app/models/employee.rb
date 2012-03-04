@@ -2,7 +2,6 @@ class Employee < ActiveRecord::Base
   # Callbacks
   # -----------------------------
   before_save :reformat_phone
-  before_save :validate_active_input
 
   
   
@@ -31,6 +30,8 @@ class Employee < ActiveRecord::Base
   scope :managers, where('role = ?', 'manager')
   # gets the regular employees
   scope :admins, where('role = ?', 'admin')
+  # searches for store by name
+  scope :search, lambda { |term| where('first_name LIKE ? OR last_name LIKE ?', "#{term}%", "#{term}%") }
   
   # Validations
   # -----------------------------
@@ -51,32 +52,20 @@ class Employee < ActiveRecord::Base
   validates_format_of :phone, :with => /^(\d{10}|\(?\d{3}\)?[-. ]\d{3}[-.]\d{4})$/, :message => "should be 10 digits with area code"
   # makes sure that the employee has a valid role
   validates_inclusion_of :role, :in => %w[manager admin employee], :message => "is not an option", :allow_nil => true, :allow_blank => false 
+  # make sure each ssn is unique
   validates_uniqueness_of :ssn
-  # searches for store by name
-  scope :search, lambda { |term| where('first_name LIKE ? OR last_name LIKE ?', "#{term}%", "#{term}%") }
-  #returns only inactive stores
-  scope :inactive, where('active = ?', false)
+
   
   # Methods
   # -----------------------------
-  def validate_active_input
-  end
-  
   def name
     last_name + ", " + first_name
   end
   
   def current_assignment
-    empid = self.id
-    curr = Assignment.start_date
+    #empid = self.id
   end
-  
-  def over_18?
-    if (self.to_date < 18.years.ago.to_date)
-      return true
-    return false     
-  end
-  
+
   def age
     bday = self.date_of_birth
     currentYear = Time.now.year
@@ -86,8 +75,25 @@ class Employee < ActiveRecord::Base
     if(currDayOfYear < bdayDayOfYear)
       #the birthday hasnt passed so we need to subtract a year from the calculation
       return currentYear - bday.year - 1
-    return currentYear - bday.year   
+    else
+      return currentYear - bday.year 
+    end  
   end
+    
+  def over_18?
+    if (self.age.to_i > 18)
+      return true
+    else
+      return false 
+    end    
+  end
+  
+
+  
+  def current_assignment
+    return self.assignments.find_by_end_date(nil)
+  end
+
 
   # Callback code
   # -----------------------------

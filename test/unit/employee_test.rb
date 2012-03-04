@@ -52,9 +52,9 @@ class EmployeeTest < ActiveSupport::TestCase
   # Testing other methods with a context
   context "Creating three employees" do
     setup do 
-      @john = Factory.create(:employee, :first_name => "John", :role => "employee", :active => false)
+      @john = Factory.create(:employee, :first_name => "John", :role => "employee", :active => false, :date_of_birth => Date.new(1994,02,14))
       @aud = Factory.create(:employee, :first_name => "Audrey", :phone => "412-268-8211", :role => "admin")
-      @aus = Factory.create(:employee, :role => "manager")
+      @aus = Factory.create(:employee, :role => "manager", :date_of_birth => Date.new(1995,04,14))
     end
     
     # provide a teardown method as well
@@ -73,6 +73,7 @@ class EmployeeTest < ActiveSupport::TestCase
             assert_equal "employee", @john.role
             assert_equal "admin", @aud.role
             assert_equal "manager", @aus.role
+            assert_equal "1994-02-14", @john.date_of_birth.to_date.to_s
             assert @aus.active
             assert @aud.active
             deny @john.active ## deny is specified in test/test_helper.rb
@@ -112,13 +113,13 @@ class EmployeeTest < ActiveSupport::TestCase
     end
     
     # test scope: is_younger_than_18
-    should "show that all the employees are not younger than 18" do
-      assert_equal [], Employee.is_younger_than_18
+    should "show that all the employees are younger than 18" do
+      assert_equal ["Smith, Austin"], Employee.is_younger_than_18.map{|e| e.name}
     end
     
     # test scope: is_18_or_older 
     should "shos that all the employees 18 or older" do
-      assert_equal ["Smith, Audrey", "Smith, Austin", "Smith, John"], Employee.is_18_or_older.alphabetical.map{|e| e.name}
+      assert_equal ["Smith, Audrey", "Smith, John"], Employee.is_18_or_older.alphabetical.map{|e| e.name}
     end
 
     # test scope: admins     
@@ -136,6 +137,29 @@ class EmployeeTest < ActiveSupport::TestCase
       assert_equal ["Smith, John"], Employee.regulars.map{|e| e.name}
     end
     
+    # test method: over_18?
+    should "show whether or not the employee is over 18" do
+      assert_equal false, @john.over_18?
+      assert_equal true, @aud.over_18?
+    end
     
+    # test method: age
+    should "show the age of the employee" do
+      assert_equal 18, @john.age
+      assert_equal 19, @aud.age
+      assert_equal 16, @aus.age
+    end
+    
+    # test method: current assignment
+    should "show if the 'current_assignment' method is working" do
+      @man = Factory.create(:employee, :first_name => "The", :last_name => "Man", :active => true)
+      @main = Factory.create(:store, :name => "Main Street", :active => true)
+      @assn_001 = Factory.create(:assignment, :store => @main, :employee => @man, :start_date => 6.months.ago.to_date, :end_date => 2.months.ago.to_date)
+      assert_equal nil, @man.current_assignment
+      @seq = Factory.create(:store, :name => "The Sequel")
+      @assn_002 = Factory.create(:assignment, :store => @seq, :employee => @man, :start_date => 5.days.ago.to_date, :end_date => nil)
+      assert_equal @assn_002, @man.current_assignment
+    end
+       
   end #test begin
 end
