@@ -2,9 +2,9 @@ class Assignment < ActiveRecord::Base
   # Callbacks
   # --------------------
   # ends previous assignment before adding a new one
+  before_create :end_previous_assignment
   before_save :store_active?
   before_save :employee_active?
-  before_create :end_previous_assignment
   
   # Relationships
   # -----------------------------
@@ -39,7 +39,7 @@ class Assignment < ActiveRecord::Base
   # checks associations
   validates_associated :store, :employee
   # checks end and start date
-  validates_date :end_date, :after => :start_date, :on_or_before => Time.now.to_date, 
+  validates_date :end_date, :on_or_before => Time.now.to_date, 
                  :allow_blank => true, :message => "end date must be after start date", :allow_nil => true
   
   # Methods
@@ -58,6 +58,7 @@ class Assignment < ActiveRecord::Base
       return false
     end
   end
+  
   
   def employee_active?
     employee = self.employee_id
@@ -84,6 +85,7 @@ class Assignment < ActiveRecord::Base
       if curr_assn.end_date == nil
         curr_assn.end_date = new_assn_enddate
         curr_assn.save!
+        self.save!
       end
     end
   end
