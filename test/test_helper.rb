@@ -18,5 +18,4 @@ class ActiveSupport::TestCase
     # a simple transformation to increase readability IMO
     assert !condition
   end
-  
 end

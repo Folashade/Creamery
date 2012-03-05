@@ -39,23 +39,15 @@ class AssignmentTest < ActiveSupport::TestCase
       # @sqh = Factory.create(:store, :name => "Squirrel Hill", :phone => "412-268-8211")
       @cmu = FactoryGirl.create(:store)
       @mar = FactoryGirl.create(:store, :name => "Market District")
-      
-
-      # @cmu = Factory.create(:store, :street => "3414 Forbes Avenue", :active => true)
-      # @forbes = Factory.create(:store, :street => "3424 Forbes Street", :name => "Forbes Store")
-      # @oakland = Factory.create(:store, :street => "3444 Forbes Road", :name => "Oakland Store")
-      
-      #@assn_001 = Factory.create(:assignment, :store => @sqh, :employee => @john, :start_date => 7.years.ago.to_date, :end_date => 4.days.ago.to_date, :pay_level => 1)
-      #       @assn_002 = Factory.create(:assignment, :store => @cmu, :employee => @jus, :start_date => 1.day.ago.to_date, :end_date => nil, :pay_level => 3)
-      #       @assn_003 = Factory.create(:assignment, :store => @mar, :employee => @bre, :start_date => 2.years.ago.to_date, :end_date => nil, :pay_level => 3)
-      #@assn_004 = Factory.create(:assignment, :store => @oakland, :employee => @kevin, :start_date => 3.years.ago.to_date, :end_date => nil, :pay_level => 6)
     end
     
     teardown do
-
+      @aud.destroy
+      @aus.destroy
+      @cry.destroy
+      @bre.destroy
       @cmu.destroy
-
-
+      @mar.destroy
     end
 
     should "not allow end date in future or before start date" do 
@@ -75,34 +67,43 @@ class AssignmentTest < ActiveSupport::TestCase
       @sqh.destroy     
      end
      
-     should "should not allow an assignment to have an inactive store or employee" do
+     should " allow an assignment to have active store or employee" do
         # valid 
-        @john = FactoryGirl.create(:employee, :first_name => "John", :role => "employee", :active => false, :date_of_birth => Date.new(1994,02,14))
+        @john = FactoryGirl.create(:employee, :first_name => "John", :role => "employee", :active => true, :date_of_birth => Date.new(1994,02,14))
         @sqh = FactoryGirl.create(:store, :name => "Squirrel Hill", :phone => "412-268-8211")
-
-        #invalid
-        @jus = FactoryGirl.create(:employee, :first_name => "Justin", :last_name => "Gates", :active => true)
-        @pitt = Factory.create(:store, :name => "Pitt", :active => false)
+        @joe = FactoryGirl.create(:employee, :first_name => "Joe", :role => "employee", :active => true, :date_of_birth => Date.new(1994,02,14))
         
         assn_001 = FactoryGirl.build(:assignment, :store => @sqh, :employee => @john, :start_date => 7.months.ago.to_date, :end_date => 5.months.ago.to_date, :pay_level => 1)
-        deny assn_001.valid?
-
-        assn_002 = FactoryGirl.build(:assignment, :store => @sqh, :employee => @john, :start_date => 7.months.ago.to_date, :end_date => 5.months.ago.to_date, :pay_level => 1)
-        deny assn_002.valid?
-
-        assn_003 = FactoryGirl.build(:assignment, :store => @sqh, :employee => @john, :start_date => 7.months.ago.to_date, :end_date => 9.months.ago.to_date, :pay_level => 1)
-        deny assn_003.valid?
-       
-        deny @assignC.valid?
-        deny @assignD.valid?
+        assert assn_001.valid?
+        assert assn_001.save == true
       
-        @adam.destroy
-        @barry.destroy
-        @uci.destroy
-        @ucsd.destroy
-      
+        @john.destroy
+        @sqh.destroy
+        @joe.destroy
       end
+  
+      should "not allow an assignment to have an inactive store or employee" do
+         # valid 
+         @bill = FactoryGirl.create(:employee, :first_name => "Bill", :role => "employee", :active => true, :date_of_birth => Date.new(1994,02,14))
+         @thor = FactoryGirl.create(:store, :name => "Thor", :phone => "412-268-8211")
+         @bob = FactoryGirl.create(:employee, :first_name => "Bob", :role => "employee", :active => true, :date_of_birth => Date.new(1994,02,14))
       
+         #invalid
+         @mis = FactoryGirl.create(:employee, :first_name => "Missy", :last_name => "Gates", :active => false)
+         @chat = Factory.create(:store, :name => "Chattum", :active => false)
+      
+         assn_001 = FactoryGirl.build(:assignment, :store => @chat, :employee => @bill, :start_date => 7.months.ago.to_date, :end_date => nil, :pay_level => 1)
+         assert assn_001.save == false
+         
+         @bill.destroy
+         @thor.destroy
+         @bob.destroy
+         @mis.destroy
+         @chat.destroy
+       end
+         
+      # assn_002 = FactoryGirl.build(:assignment, :store => @pitt, :employee => @joe, :start_date => 7.months.ago.to_date, :end_date => nil, :pay_level => 1)
+      # assert assn_002.valid?    
        # 
        # should "should make sure that the previous assignment ends when new one starts" do
        #   @adam = Factory.create(:employee, :first_name => "Adam", :last_name => "Aardvork", :active => true)
