@@ -90,7 +90,8 @@ class Assignment < ActiveRecord::Base
     end
   end
     
-      
+  def date_check
+    self.end_
   
   
 end
